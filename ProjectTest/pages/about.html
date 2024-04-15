@@ -1,0 +1,32 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="timer">00:00</div>
+        <script>
+            //initialise variables
+            var seconds = 0;
+            var mins = 0;
+            var counter;
+            //function to count seconds and mins and display such
+            function Timer()
+            {
+            const time = document.getElementById("timer");
+            if(seconds >= 60)
+            {
+            seconds = 0;
+            mins++;
+            }
+            var formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
+            var formattedMinutes = mins < 10 ? "0" + mins : mins;
+            time.textContent = formattedMinutes + ":" + formattedSeconds; 
+            seconds++;
+            }
+            Timer();
+            //lets the function run once to prevent infinite incrementation w page reloads
+            clearInterval(counter);
+            counter = setInterval(Timer, 1000);
+
+        </script>
+    </body>
+</html>

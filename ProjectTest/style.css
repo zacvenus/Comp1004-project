@@ -1,0 +1,31 @@
+*
+{
+    margin: 10px;
+    padding: 10px;
+    font-family:'Times New Roman', Times, serif;
+}
+
+header
+{
+    display: flex;
+    justify-content: center;
+    position: top sticky;
+    background-color:blueviolet;
+}
+
+.icon
+{
+    font-size: large;
+}
+
+.menu
+{
+    display: flex;
+}
+
+footer
+{
+    background-color:blueviolet;
+    display: flex;
+    justify-content: center;
+}

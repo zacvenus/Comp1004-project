@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <title>tictactoe</title>
+        <style>      
+            #heading
+            {
+                display: block;
+                width: 100%;
+            }
+            #game
+            {
+                display: grid;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+            }
+
+            #grid
+            {
+                display: inline-grid;
+                grid-template-columns: 3fr 3fr 3fr;
+                grid-gap: 3px;
+            }
+
+            .cell
+            {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid white;
+                width: 200px;
+                height: 200px;
+                cursor: pointer;
+                font-size: 100px;
+                color:white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="game">
+            <div id="heading"></div>
+            <div id="grid">
+                <div class="cell" x="1" y="1"></div>
+                <div class="cell" x="2" y="1"></div>
+                <div class="cell" x="3" y="1"></div>
+                <div class="cell" x="1" y="2"></div>
+                <div class="cell" x="2" y="2"></div>
+                <div class="cell" x="3" y="2"></div>
+                <div class="cell" x="1" y="3"></div>
+                <div class="cell" x="2" y="3"></div>
+                <div class="cell" x="3" y="3"></div>
+            </div>
+        </div>
+        <script>
+            //replace alert with text window w options to quit or try again. implement switch case for game states
+            function RunGame()
+            {
+                //turn decider
+                var turn = "O";
+                const heading = document.getElementById("heading");
+                heading.innerText = turn + "'s turn!";
+
+                //creates a 3x3 grid
+                cellXY = Array(Array(3),Array(3),Array(3));
+                //creates button on each cell
+                const cells = document.querySelectorAll(".cell");
+                cells.forEach((cell)=>
+                {
+                    cell.addEventListener("click", function()
+                    {
+                        //checks if cell is empty
+                        if(cell.innerText == "")
+                        {
+                            $x = cell.getAttribute("x")-1;
+                            $y = cell.getAttribute("y")-1;
+
+                            cell.innerText = turn;
+
+                            cellXY[$x][$y] = turn;
+                            
+                            //horizontal wincon
+                            if(cellXY[$x][0] == cellXY[$x][1] && cellXY[$x][0] == cellXY[$x][2])
+                            {
+                                alert(turn + " IS THE WINNER!");
+                            }
+                            //vertical wincon
+                            if(cellXY[0][$y] == cellXY[1][$y] && cellXY[0][$y] == cellXY[2][$y])
+                            {
+                                alert(turn + " IS THE WINNER!");
+                            }
+                            //diagonal wincon 1 & 2
+                            if(($x == $y) && (cellXY[0][0] == cellXY[1][1]) && (cellXY[0][0] == cellXY[2][2])) 
+                            {
+                                alert(turn + " IS THE WINNER!");
+                            }
+                            if(($x + $y == 2) && (cellXY[0][2] == cellXY[1][1]) && (cellXY[0][2] == cellXY[2][0])) 
+                            {
+                             alert(turn + " IS THE WINNER!");
+                            }
+                            
+                            //changes turn
+                            if(turn == "O")
+                            {
+                                turn = "X";
+                            }
+                            else
+                            {
+                                turn = "O";
+                            }
+                            heading.innerText = turn + "'s turn!";
+                        }
+                    });
+                });
+            }
+            RunGame();
+        </script>
+    </body>
+</html>
