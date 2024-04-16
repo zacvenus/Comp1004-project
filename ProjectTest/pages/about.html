@@ -12,6 +12,8 @@
             function Timer()
             {
             const time = document.getElementById("timer");
+            if (time)
+            {
             if(seconds >= 60)
             {
             seconds = 0;
@@ -22,11 +24,53 @@
             time.textContent = formattedMinutes + ":" + formattedSeconds; 
             seconds++;
             }
+            }
             Timer();
+            clearInterval(counter)
             //lets the function run once to prevent infinite incrementation w page reloads
-            clearInterval(counter);
             counter = setInterval(Timer, 1000);
 
+            //change so runs before window closes/changes
+            function Write()
+            {
+                var jrequest = new XMLHttpRequest();
+                jrequest.open("GET", "pages/Item.json", true);
+                jrequest.responseType ="json";
+                jrequest.onload = function()
+                {
+                    if (jrequest.status == 200)
+                    {
+                    //read json data and update
+                    const Jdata = jrequest.response;
+                    Jdata.time.min += mins;
+                    Jdata.time.sec += seconds;
+                    const updatedJson = JSON.stringify(Jdata);
+                    //send to server to update json
+                    var update = new XMLHttpRequest();
+                    update.open("POST", "update.php");
+                    update.setRequestHeader("Content-Type", "application/json");
+                    update.onload = function()
+                    {
+                        if(update.status == 200)
+                        {
+                            console.log("sucess");
+                        }
+                        else
+                        {
+                            console.log("fail");
+                        }
+                    };
+                    update.send(updatedJson);
+                    }
+                    //error handling
+                    else
+                    {
+                        console.log("error writing to json")
+                    }
+                }
+                jrequest.send();
+            }
+            Write();
         </script>
     </body>
 </html>

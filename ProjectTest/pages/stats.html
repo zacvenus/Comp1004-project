@@ -1,1 +1,72 @@
-<h1>hiuhihiihihi</h1>
+<html>
+    <head>
+        <style>
+            #background
+            {
+                display: block;
+                width: 100%;
+            }
+            #stats
+            {
+                display: grid;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+                color:white;
+            }
+            #display
+            {
+                width:auto;
+                height:auto;
+                border: 4px;
+                text-align: center;
+                line-height: 100px;
+                font-size: 32px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="background">
+            <div id="stats">
+                <div id="display">
+                    <div id="times"></div>
+                    <div id="games"></div>
+                    <div id="test1"></div>
+                    <div id="test2"></div>
+                </div>
+            </div>
+        </div>
+
+        <script> 
+        //code to view json data 
+        var jrequest = new XMLHttpRequest();
+        jrequest.open("GET", "pages/Item.json", true);
+        jrequest.responseType ="json";
+        jrequest.onload = function()
+        {
+            if (jrequest.status == 200)
+            {
+                //read json data and display in divs
+                const Jdata = jrequest.response;
+                const times = document.getElementById("times")
+                const games = document.getElementById("games")
+                const test1 = document.getElementById("test1")
+                const test2 = document.getElementById("test2")
+                times.textContent = "Time spent playing (mins:secs) -> " + Jdata.time.min + ":" + Jdata.time.sec;
+                games.textContent = "Games played -> " + Jdata.games;
+                test1.textContent = "This is a test -> " + Jdata.test1;
+                test2.textContent = "This is a test -> " + Jdata.test2;
+            }
+            //error handling
+            else
+            {
+                const container = document.getElementById("json");
+                container.innerHTML = "Error fetching json data";
+            }
+        };
+        jrequest.send(); 
+        
+        </script>
+    </body>
+</html>

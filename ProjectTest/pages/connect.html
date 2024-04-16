@@ -1,1 +1,155 @@
-<h1>hihiaahidadwhiawdhiawdawdhi</h1>
+<html>
+    <head>
+        <style>
+            body
+            {
+                text-align: center;
+            }
+            #grid
+            {
+                height: 600px;
+                width: 700px;
+                background-color: blueviolet;
+                border: 10px solid purple;
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .tile
+            {
+                height: 60px;
+                width: 60px;
+                background-color: white;
+                border-radius: 50%;
+                margin: 5px;
+                border: 5px solid purple;
+            }
+            .B
+            {
+                background-color: black;
+            }
+            .Y
+            {
+                background-color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Connect 4</h1>
+        <h2 id="WINNER"></h2>
+        <div id="grid"></div>
+        <script>
+            //initialise variables
+            var p1 = "B";
+            var p2 = "Y";
+            var now = p1;
+            var end = false;
+            var grid;
+            var rows = 6;
+            var collum = 7;
+            var height;
+
+            //game function
+            function Game()
+            {
+                grid = [];
+                height = [5,5,5,5,5,5,5];
+                for (let r=0; r < rows; r++)
+                {
+                    //creates blank board w tiles w click
+                    let row = [];
+                    for (let c=0; c < collum; c++)
+                    {
+                    row.push(" ");
+                    let tile = document.createElement("div");
+                    tile.id = r.toString() + "-" + c.toString();
+                    tile.classList.add("tile");
+                    tile.addEventListener("click", set);
+                    document.getElementById("grid").append(tile);
+                    }
+                    grid.push(row);
+                }
+            }
+            //function to place tiles
+            function set()
+            {
+                //cant place if game over
+                if (end)
+                {
+                    return;
+                }
+
+                //get position on board
+                let position = this.id.split("-");
+                let r = parseInt(position[0])
+                let c = parseInt(position[1])
+
+                //make sure collum isnt full
+                r = height[c];
+                if (r<0)
+                {
+                    return;
+                }
+                //make sure tile isnt full
+                if (this.classList.contains("B") || this.classList.contains("Y"))
+                {
+                    return;
+                }
+
+                //change color based on player
+                let tile = document.getElementById(r.toString() + "-" + c.toString());
+                if (now == p1)
+                {
+                    tile.classList.add("B");
+                    now = p2;
+                }
+                else
+                {
+                    tile.classList.add("Y");
+                    now = p1;
+                }
+                //update height
+                r -=1;
+                height[c] = r;
+
+                check();
+            }
+            function check()
+            {
+            //horizontal win
+            for (let r=0; r < rows; r++)
+            {
+                for (let c=0; c <  collum - 3; c++)
+                {
+                    if (grid[r][c] != " ")
+                    {
+                        if (grid[r][c] == grid[r][c+1] && grid[r][c+1] == grid[r][c+2] && grid[r][c+2] == grid[r][c+3])
+                        {
+                            win(r, c);
+                            return;
+                        }
+                    }
+                }
+            }
+            //vertical win
+            //diagonal win
+            }
+
+            function win(r, c)
+            {
+                let WINNER = document.getElementById("WINNER");
+                if (grid[r][c] == p1)
+                {
+                    WINNER.innerText = "Player 1 wins";
+                }
+                else
+                {
+                    WINNER.innerText = "Player 2 wins";
+                }
+                end = true;
+            }
+            Game();
+            
+        </script>
+    </body>
+</html>

@@ -65,7 +65,9 @@ window.onload = function()
     //global function to load a page rq from server
     function loadPage($path)
     {
+        console.log($path);
         if($path == "") return;
+        if($path == "index") return;
         //fetches from pages file
         const container = document.getElementById("container");
         const request = new XMLHttpRequest();
@@ -78,7 +80,7 @@ window.onload = function()
                 //if req succeed import html and rewrite script
                 container.innerHTML = request.responseText;
                 document.title = $path;
-                //                                                                                     add fix such that theres no "cannot GET "" error"
+                
                 const scriptElement = container.querySelector("script");
                 const newScript = document.createElement("script");
                 newScript.textContent = scriptElement.textContent;
@@ -90,3 +92,15 @@ window.onload = function()
             }
         }
     }
+//handles back and forward history movement
+window.addEventListener("popstate", function()
+{
+    const path = location.pathname;
+    loadPage(path);
+});
+
+
+
+
+// i think the relaod issue could be due to the GET /about rather than, GET pages/about 
+// so i will have to search how to ahndle as such
