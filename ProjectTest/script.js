@@ -81,10 +81,10 @@ window.onload = function()
                 container.innerHTML = request.responseText;
                 document.title = $path;
                 
-                const scriptElement = container.querySelector("script");
-                const newScript = document.createElement("script");
-                newScript.textContent = scriptElement.textContent;
-                scriptElement.parentNode.replaceChild(newScript, scriptElement);
+                const script = container.querySelector("script");
+                const Nscript = document.createElement("script");
+                Nscript.textContent = script.textContent;
+                script.parentNode.replaceChild(Nscript, script);
             }
             else
             {
