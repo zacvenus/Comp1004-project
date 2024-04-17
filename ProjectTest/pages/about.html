@@ -1,8 +1,36 @@
 <html>
     <head>
+        <style>
+            body
+            {
+                justify-content: center;
+                align-items: center;
+            }
+            #button
+            {
+                height: 200px;
+                width: 400px;
+                font-size: 50px;
+                background-color: green;
+                color: white;
+                text-align: center;
+                line-height: 200px;
+                display: flex;
+                border-radius:15px;
+            }
+            #button:hover
+            {
+                background-color: lightgreen;
+            }
+        </style>
     </head>
     <body>
         <div id="timer">00:00</div>
+        <div>This is my comp1004 project as a single page application that dynamically displays html files inside an index html page.</div>
+        <div>Allowing the application to present multiple games on one page as well as other forms of data such as a json file.
+            Such as using the time at the top of this box to read to and from a local json. </div>
+        <div>by clicking this green button you will download the updated json.</div>
+        <div id="button">DOWNLOAD</div>
         <script>
             //initialise variables
             var seconds = 0;
@@ -45,32 +73,26 @@
                     Jdata.time.min += mins;
                     Jdata.time.sec += seconds;
                     const updatedJson = JSON.stringify(Jdata);
-                    //send to server to update json
-                    var update = new XMLHttpRequest();
-                    update.open("POST", "update.php");
-                    update.setRequestHeader("Content-Type", "application/json");
-                    update.onload = function()
-                    {
-                        if(update.status == 200)
-                        {
-                            console.log("sucess");
-                        }
-                        else
-                        {
-                            console.log("fail");
-                        }
-                    };
-                    update.send(updatedJson);
-                    }
-                    //error handling
-                    else
-                    {
-                        console.log("error writing to json")
+                    console.log(updatedJson);
+                    //update the json which is impossible to do without server side scripting
+                    //so instead a freind mentioned it was acceptable to just have it in local storage/ as a download so ill just do both
+                    var data = new Blob([updatedJson], {type: "application/json"});
+                    var url = URL.createObjectURL(data);
+                    var link = document.createElement("a");
+                    link.href = url;
+                    link.download = "Item.json";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
                     }
                 }
                 jrequest.send();
             }
-            Write();
+            document.getElementById("button").addEventListener("click",function()
+            {
+                Write();
+            });
         </script>
     </body>
 </html>

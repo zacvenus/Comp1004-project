@@ -1,0 +1,165 @@
+<html>
+    <head>
+        <style>
+            #map
+            {
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="map" width="800px" height="800px"></canvas>
+        <script>
+            var map = document.getElementById("map");
+            var dimension = map.getContext("2d");
+            //draws a shape
+            function drawRect(x, y, color) 
+            {
+                var size = 20;
+                var padding = 2;
+                dimension.beginPath();
+                dimension.fillStyle = color;
+                dimension.fillRect((size + padding) * x, (size + padding) * y, size, size);
+                dimension.fill();
+            }
+            var grid = 10;
+            //snake define
+            class Snake {
+                constructor() 
+                {
+                    this.x = 0;
+                    this.y = 0;
+                    this.color = "#000";
+                    this.dire = 2;
+                    this.tailList = [];
+                }
+
+                update() 
+                {
+                //current pos
+                var last = { x: this.x, y: this.y };
+
+                //movement
+                switch (this.dire) 
+                {
+                case 0: this.x -= 1; break; 
+                case 1: this.y -= 1; break; 
+                case 2: this.y += 1; break; 
+                case 3: this.x += 1; break; 
+                }
+
+                //wrap
+                this.x = this.loop(this.x);
+                this.y = this.loop(this.y);
+
+                //tail movement
+                for (var i = this.tailList.length - 1; i > 0; i--) 
+                {
+                    this.tailList[i] = { ...this.tailList[i - 1] };
+                }
+
+                // Update the first segment of the tail to follow the head's previous position
+                if (this.tailList.length > 0) 
+                {
+                    this.tailList[0] = { ...last };
+                }
+                }
+
+                //grow
+                addTail() 
+                {
+                    this.tailList.push({ x: this.x, y: this.y });
+                }
+
+                //wrap
+                loop(value) 
+                {
+                    if (value < 0) 
+                    {
+                        value = grid - 1;
+                    }
+                    else if (value > grid - 1) 
+                    {
+                        value = 0;
+                    }
+                    return value;
+                }
+            }
+            //define apple
+            class Apple 
+            {
+                constructor() 
+                {
+                    this.x = 0;
+                    this.y = 0;
+                    this.color = "#f00";
+                }
+
+                randomPosition() 
+                {
+                    this.x = parseInt(Math.random() * grid);
+                    this.y = parseInt(Math.random() * grid);
+                }
+            }
+            //load grid
+            var snake = new Snake();
+            var apple = new Apple();
+            apple.randomPosition();
+            
+            setInterval(function () 
+            {
+                for (var x = 0; x < grid; x++) 
+                {
+                    for (var y = 0; y < grid; y++) 
+                    {
+                        drawRect(x, y, "#eee");
+                    }
+                }
+                
+                //run growth
+                snake.update();
+                if (snake.x == apple.x && snake.y == apple.y) 
+                {
+                    snake.addTail();
+                    apple.randomPosition();
+                }
+
+
+                for (var i in snake.tailList) 
+                {
+                    var p = snake.tailList[i];
+                    drawRect(p.x, p.y, snake.color);
+                }
+                drawRect(snake.x, snake.y, snake.color);
+                drawRect(apple.x, apple.y, apple.color);
+                }, 200);
+
+
+            // function for movement 
+            window.onkeydown = function (e) 
+            {
+            switch (e.keyCode) 
+            {
+            case 37: // Left arrow key
+                if (snake.dire !== 3)
+                    snake.dire = 0;
+                    break;
+            case 38: // Up arrow key
+                if (snake.dire !== 2) 
+                    snake.dire = 1;
+                    break;
+            case 39: // Right arrow key
+                if (snake.dire !== 0)
+                    snake.dire = 3;
+                    break;
+            case 40: // Down arrow key
+                if (snake.dire !== 1) 
+                    snake.dire = 2;
+                break;
+            }
+        };
+
+        </script>
+    </body>
+</html>

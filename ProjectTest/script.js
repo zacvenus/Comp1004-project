@@ -99,8 +99,5 @@ window.addEventListener("popstate", function()
     loadPage(path);
 });
 
-
-
-
 // i think the relaod issue could be due to the GET /about rather than, GET pages/about 
-// so i will have to search how to ahndle as such
+// so i will have to search how to handle as such
